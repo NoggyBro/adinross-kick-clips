@@ -1,0 +1,29 @@
+name: Kick Clips Notifier - Adin Ross
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'     # Every 5 minutes
+  workflow_dispatch:          # Allows you to run manually
+
+jobs:
+  check-clips:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run clip checker
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python main.py
